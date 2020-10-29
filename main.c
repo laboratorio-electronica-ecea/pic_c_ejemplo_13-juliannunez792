@@ -1,6 +1,6 @@
 /*
  * Nombre del archivo:   main.c
- * Autor:
+ * Autor: Julian Nunez
  *
  * Descripción: 
  *      Configura la UART para trabajar a 9600 bps con 8 bits de datos y 1 bit 
@@ -65,13 +65,15 @@
 /* ------------------------ Prototipos de funciones ------------------------- */
 void gpio_config();
 void uart_config();
+void uart_tx_byte (uint8_t dato);
+uint8_t uart_rx_byte (uint8_t dato);
 // TODO: Prototipo de una función que permita transmitir un byte (uartWriteByte)
 // TODO: Prototipo de una función que permita recibir un byte (uartReadByte)
 
 /* ------------------------ Implementación de funciones --------------------- */
 void main(void) {                       // Función principal
     uint8_t dato_recibido;              // Variable donde se almacenan datos
-
+    uint8_t resultado;
     gpio_config();                      // Inicializo las entradas y salidas
     uart_config();                      // Configuro la UART
     
@@ -79,6 +81,7 @@ void main(void) {                       // Función principal
         // Ver este link: https://pbs.twimg.com/media/BafQje7CcAAN5en.jpg
         
         // TODO: Completar la encuesta por las teclas
+        
     }
     
     // NO DEBE LLEGAR NUNCA AQUÍ, debido a que este programa se ejecuta
@@ -95,14 +98,36 @@ void gpio_config() {
 void uart_config() {
     // TODO: Configura la UART para trabajar a 9600 bps con 8 bits de datos
     // y 1 bit de stop
+    
+    TXSTAbits.TX9 = 0;
+    TXSTAbits.TXEN = 1;
+    TXSTAbits.SYNC = 0;
+    
+    TXSTAbits.BRGH = 0;
+    
+    BAUDCTLbits.BRC16 = 1;
+    SPBRG = 25;
+            
+    RCSTAbits.SPEN = 1;
+    RCSTAbits.RX9 = 0;
+    RCSTAbits.CREN = 1;
 }
 
 void uart_tx_byte( uint8_t dato ) {
+    
+    while (PIR1bits.TX1F == 0);
+    TXREG - dato;
     // TODO: Implementa una función que permita transmitir un byte (uartWriteByte)
 }
 
 uint8_t uart_rx_byte( uint8_t *dato ) {
     // TODO: Implementa una función que permita recibir un byte (uartReadByte)
+    if( PIR1bits.RCIF == 1){return 1;}
+    else  {return 0;}
+    
+
+
 }
+
 
 /* ------------------------ Fin de archivo ---------------------------------- */
