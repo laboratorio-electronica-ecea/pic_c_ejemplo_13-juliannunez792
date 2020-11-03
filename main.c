@@ -81,8 +81,38 @@ void main(void) {                       // Función principal
         // Ver este link: https://pbs.twimg.com/media/BafQje7CcAAN5en.jpg
         
         // TODO: Completar la encuesta por las teclas
+        if (PIN_TEC1 == 0){
+            __delay_ms(40);    
+            uart_tx_byte('U');
+            while (PIN_TEC1 == 0);
+            __delay_ms(40);
+        }
+         if (PIN_TEC2 == 0){
+            __delay_ms(40);    
+            uart_tx_byte('D');
+            while (PIN_TEC2 == 0);
+            __delay_ms(40);
+        }
         
+        
+        resultado = uart_rx_byte(&dato_recibido);
+        
+        if(resultado == 1)
+        {
+            if( dato_recibido == '1')
+            {PIN_LED1 = ! PIN_LED1;
+            }
+            else if ( dato_recibido = '2')
+            {PIN_LED2 = ! PIN_LED2;
+            }
+            else if ( dato_recibido = '3')
+            {PIN_LED3 = ! PIN_LED3;
+            }
+            else if ( dato_recibido = '4')
+            {PIN_LED4 = ! PIN_LED4;
+            }
     }
+    
     
     // NO DEBE LLEGAR NUNCA AQUÍ, debido a que este programa se ejecuta
     // directamente sobre un microcontrolador y no es llamado por un ningún
@@ -91,7 +121,20 @@ void main(void) {                       // Función principal
     return;
 }
 
-void gpio_config() {    
+void gpio_config() {   
+    
+    ANSEL = 0;
+    ANSELH = 0;
+    
+   TRIS_LED1=0;
+   TRIS_LED2=0;
+   TRIS_LED3=0;
+   TRIS_LED4=0;
+    
+    TRIS_TEC1=1;
+    TRIS_TEC2=1;
+    
+    
     // TODO: Completar la inicialización de los pines
 }
 
